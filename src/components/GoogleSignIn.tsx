@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function GoogleSignIn() {
   const { data: session, status } = useSession();
-  const [email, setEmail] = useState("");
-  const [showEmailInput, setShowEmailInput] = useState(false);
-  const [sent, setSent] = useState(false);
 
   if (status === "loading") {
     return <div className="text-xs text-neutral-500 px-3 py-2">Loading...</div>;
@@ -48,39 +45,6 @@ export default function GoogleSignIn() {
         </svg>
         GitHub
       </button>
-
-      {showEmailInput ? (
-        sent ? (
-          <p className="text-xs text-buy px-1">Check your inbox for a sign-in link.</p>
-        ) : (
-          <div className="flex gap-1">
-            <input
-              type="email"
-              placeholder="you@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-black/30 border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:border-aurora2 outline-none"
-            />
-            <button
-              onClick={async () => {
-                await signIn("email", { email, redirect: false });
-                setSent(true);
-              }}
-              disabled={!email.includes("@")}
-              className="gradient-btn text-xs px-2.5 rounded-lg disabled:opacity-30"
-            >
-              Send
-            </button>
-          </div>
-        )
-      ) : (
-        <button
-          onClick={() => setShowEmailInput(true)}
-          className="glass px-3 py-2 rounded-xl text-sm hover:border-white/25 w-full"
-        >
-          ✉️ Sign in with Email
-        </button>
-      )}
     </div>
   );
 }
